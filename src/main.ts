@@ -18,8 +18,8 @@ async function bootstrap() {
 
   // Configuración de Swagger
   const config = new DocumentBuilder()
-    .setTitle('API Colegio Cambridge')
-    .setDescription('Documentación de la API del Colegio Cambridge')
+    .setTitle('API Politécnico')
+    .setDescription('Documentación de la API del Politécnico')
     .setVersion('1.0')
     .build();
 

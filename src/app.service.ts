@@ -5,7 +5,7 @@ export class AppService {
   getRunningMessage(): { status: string; message: string } {
     return {
       status: 'OK',
-      message: 'API Colegio Cambridge running!',
+      message: 'API Politécnico running!',
     };
   }
 }
