@@ -34,7 +34,7 @@ export class OficinaService {
       { new: true },
     );
 
-    return savedOficina;
+    return savedOficina.toObject();
   }
 
   async findAll(): Promise<Oficina[]> {
@@ -42,6 +42,7 @@ export class OficinaService {
       .find()
       .populate('area')
       .populate('empleados')
+      .lean()
       .exec();
   }
 
@@ -50,13 +51,14 @@ export class OficinaService {
       .findById(id)
       .populate('area')
       .populate('empleados')
+      .lean()
       .exec();
     if (!r) throw new NotFoundException('Oficina no encontrada');
     return r;
   }
 
   async findByCode(codigo: string): Promise<Oficina | null> {
-    return this.oficinaModel.findOne({ codigo }).exec();
+    return this.oficinaModel.findOne({ codigo }).lean().exec();
   }
 
   async update(id: string, updateOficinaDto: UpdateSalonDto): Promise<Oficina> {
@@ -77,7 +79,7 @@ export class OficinaService {
     }
 
     Object.assign(oficina, updateOficinaDto);
-    return oficina.save();
+    return (await oficina.save()).toObject();
   }
 
   async remove(id: string): Promise<Oficina> {
@@ -88,6 +90,6 @@ export class OficinaService {
     await this.areaModel.findByIdAndUpdate(oficina.area, {
       $pull: { oficinas: oficina._id },
     });
-    return oficina;
+    return oficina.toObject();
   }
 }

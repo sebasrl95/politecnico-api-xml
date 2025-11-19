@@ -6,17 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { SalonService } from './salon.service';
 import { CreateSalonDto } from './dto/create-salon.dto';
 import { UpdateSalonDto } from './dto/update-salon.dto';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
+import { XmlInterceptor } from 'src/common/interceptors/xml.interceptor';
 
 @ApiTags('Salón')
 @Controller('salon')
 export class SalonController {
   constructor(private readonly salonService: SalonService) {}
 
+  @UseInterceptors(XmlInterceptor)
   @Post()
   @ApiResponse({ status: 201, description: 'Salón creado exitosamente.' })
   create(@Body() createSalonDto: CreateSalonDto) {

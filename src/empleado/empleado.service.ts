@@ -65,7 +65,7 @@ export class EmpleadoService {
       );
     }
 
-    return savedEmpleado;
+    return savedEmpleado.toObject();
   }
 
   async findAll(): Promise<Empleado[]> {
@@ -73,6 +73,7 @@ export class EmpleadoService {
       .find()
       .populate('area')
       .populate('oficina')
+      .lean()
       .exec();
   }
 
@@ -81,6 +82,7 @@ export class EmpleadoService {
       .findById(id)
       .populate('area')
       .populate('oficina')
+      .lean()
       .exec();
 
     if (!empleado) {
@@ -124,7 +126,7 @@ export class EmpleadoService {
     }
 
     Object.assign(empleado, updateEmpleadoDto);
-    return empleado.save();
+    return (await empleado.save()).toObject();
   }
 
   async remove(id: string): Promise<Empleado> {
@@ -144,6 +146,6 @@ export class EmpleadoService {
       });
     }
 
-    return empleado;
+    return empleado.toObject();
   }
 }

@@ -63,6 +63,6 @@ export class AreaService {
   async remove(id: string): Promise<Area> {
     const area = await this.areaModel.findByIdAndDelete(id).exec();
     if (!area) throw new NotFoundException('Área no encontrada');
-    return area;
+    return area.toObject();
   }
 }

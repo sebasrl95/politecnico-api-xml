@@ -37,15 +37,19 @@ export class SalonService {
       { new: true },
     );
 
-    return savedSalon;
+    return savedSalon.toObject();
   }
 
   async findAll(): Promise<Salon[]> {
-    return this.salonModel.find().populate('area').exec();
+    return this.salonModel.find().populate('area').lean().exec();
   }
 
   async findOne(id: string): Promise<Salon> {
-    const salon = await this.salonModel.findById(id).populate('area').exec();
+    const salon = await this.salonModel
+      .findById(id)
+      .populate('area')
+      .lean()
+      .exec();
     if (!salon) {
       throw new NotFoundException(`Salón con id ${id} no encontrado`);
     }
@@ -66,7 +70,7 @@ export class SalonService {
     }
 
     Object.assign(salon, updateSalonDto);
-    return salon.save();
+    return (await salon.save()).toObject();
   }
 
   async remove(id: string): Promise<Salon> {
@@ -76,6 +80,6 @@ export class SalonService {
     await this.areaModel.findByIdAndUpdate(salon.area, {
       $pull: { salones: salon._id },
     });
-    return salon;
+    return salon.toObject();
   }
 }

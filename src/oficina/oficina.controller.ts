@@ -6,17 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { OficinaService } from './oficina.service';
 import { CreateOficinaDto } from './dto/create-oficina.dto';
 import { UpdateOficinaDto } from './dto/update-oficina.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { XmlInterceptor } from 'src/common/interceptors/xml.interceptor';
 
 @ApiTags('Oficina')
 @Controller('oficina')
 export class OficinaController {
   constructor(private readonly oficinaService: OficinaService) {}
 
+  @UseInterceptors(XmlInterceptor)
   @Post()
   @ApiResponse({ status: 201, description: 'Oficina creada exitosamente.' })
   create(@Body() createOficinaDto: CreateOficinaDto) {
