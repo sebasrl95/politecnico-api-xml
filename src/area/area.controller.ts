@@ -6,17 +6,20 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AreaService } from './area.service';
 import { CreateAreaDto } from './dto/create-area.dto';
 import { UpdateAreaDto } from './dto/update-area.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { XmlInterceptor } from 'src/common/interceptors/xml.interceptor';
 
 @ApiTags('Área')
 @Controller('area')
 export class AreaController {
   constructor(private readonly areaService: AreaService) {}
 
+  @UseInterceptors(XmlInterceptor)
   @Post()
   @ApiResponse({ status: 201, description: 'Area creada exitosamente.' })
   create(@Body() createAreaDto: CreateAreaDto) {

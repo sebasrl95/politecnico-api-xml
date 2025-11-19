@@ -2,10 +2,16 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { XmlInterceptor } from 'src/common/interceptors/xml.interceptor';
+import { XmlExceptionFilter } from './common/interceptors/xml-exception.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
+
+  // ** Registrar interceptor globalmente usando app.useGlobalInterceptors **
+  app.useGlobalInterceptors(new XmlInterceptor());
+  app.useGlobalFilters(new XmlExceptionFilter());
 
   // Prefijo global para la API
   app.setGlobalPrefix('api/v1');

@@ -24,7 +24,7 @@ export class AreaService {
     }
 
     const newArea = new this.areaModel(createAreaDto);
-    return newArea.save();
+    return (await newArea.save()).toObject();
   }
 
   async findAll(): Promise<Area[]> {
@@ -32,6 +32,7 @@ export class AreaService {
       .find()
       .populate('oficinas')
       .populate('salones')
+      .lean()
       .exec();
   }
 
@@ -40,18 +41,20 @@ export class AreaService {
       .findById(id)
       .populate('oficinas')
       .populate('salones')
+      .lean()
       .exec();
     if (!area) throw new NotFoundException('Área no encontrada');
     return area;
   }
 
   async findByName(nombre: string): Promise<Area | null> {
-    return this.areaModel.findOne({ nombre }).exec();
+    return this.areaModel.findOne({ nombre }).lean().exec();
   }
 
   async update(id: string, updateAreaDto: UpdateAreaDto): Promise<Area> {
     const area = await this.areaModel
       .findByIdAndUpdate(id, updateAreaDto, { new: true })
+      .lean()
       .exec();
     if (!area) throw new NotFoundException('Área no encontrada');
     return area;

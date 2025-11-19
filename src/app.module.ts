@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -8,6 +8,7 @@ import { OficinaModule } from './oficina/oficina.module';
 import { SalonModule } from './salon/salon.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { mongoConfig } from './config/mongo.config';
+import { XmlBodyMiddleware } from './common/middlewares/xml-body.middleware';
 
 @Module({
   imports: [
@@ -26,4 +27,8 @@ import { mongoConfig } from './config/mongo.config';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(XmlBodyMiddleware).forRoutes('*');
+  }
+}
